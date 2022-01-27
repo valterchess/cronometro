@@ -1,87 +1,47 @@
-import React from 'react';
-import Botao from './components/Botao';
-import Contador from './components/Contador';
-import LabelRelogio from './components/LabelRelogio';
+import React, {useState} from 'react';
+import DisplayComponent from './components/DisplayComponent';
+import BtnComponent from './components/BtnComponent';
 import './App.css';
 
-class App extends React.Component {
-  constructor(props){
-    super(props);
-    this.state={
-      segundos: 0,
-      minutos: 0,
-      stop: false,
-      nameStop: "Stop",
-      name: "Relógio", 
-      parcial: ""
-    };
-  }
-   zerarCronometro() {
-      this.state.segundos = -1
-      this.state.minutos = 0
-      this.state.parcial = ""
-   }
-  
-  parcial(){
-    let p = this.state.minutos+ ":"+ this.state.segundos + "\n\n"
-    this.state.parcial = this.state.parcial + p
-  }
-  
-  pararTempo(){
-    this.setState({ 
-        stop: !this.state.stop 
-      })
-    if (this.state.stop)
-      this.state.nameStop = "Stop"
-    else
-      this.state.nameStop = "Start"
-  }
+function App() {
+  const [time, setTime] = useState({ms:0, s:0, m:0, h:0});
+  const [interv, setInterv] = useState();
+  const [status, setStatus] = useState(0);
 
-  incrementar () {
-    if (this.state.stop === false){
-      this.setState(
-         function (state, props) {
-          if (state.segundos >= 5){
-            this.zerar();
-            this.incrementarMinuto(state);
-          }  
-          return({ segundos: state.segundos +1})
-         })
+  const start = () => {
+    run();
+    setInterv(setInterval(run, 10));
+    
+  }
+  var updateMs = time.ms, updateS = time.s,updateM = time.m,updateH = time.h;
+
+  const run = () => {
+    if(updateM === 60){
+      updateH++;
+      updateM = 0;
     }
+    if(updateS === 60){
+      updateM++;
+      updateS = 0;
+    }
+    if(updateMs === 100){
+      updateS++;
+      updateMs = 0;
+    }
+    updateMs++;
+    return setTime({ms:updateMs, s:updateS, m:updateM, h:updateH});
   }
-  
-  incrementarMinuto (state) {
-    this.setState(() => { 
-      return {minutos: state.minutos +1}
-    })
-  };
-  
-  zerar () {
-    this.setState({ 
-      segundos: 0 
-    })
-  }
-
-  componentDidMount(){
-    this.timer = setInterval(
-      () => this.incrementar(), 1000)
-  }
-  
-
-  render(){
-
-    return (
-      <div>
-        
-        <Contador minutos={this.state.minutos} segundos={this.state.segundos} />
-        <LabelRelogio name={this.state.name} />
-        <Botao onClick={() => this.zerarCronometro()} label={"Zerar"} />
-        <Botao onClick={() => this.pararTempo()} label={this.state.nameStop} />
-        <Botao onClick={() => this.parcial()} label={"Pacial"} />
-        <LabelRelogio name={this.state.parcial} />
+  return (
+    <div className="main-section">
+      <div className="clock-holder">
+        <div className="stopwatch">
+          <DisplayComponent time={time}/>
+          <BtnComponent status={status} start={start}/>
+        </div>
       </div>
-    );
-  }
+
+    </div>
+  );
 }
 
 export default App;
