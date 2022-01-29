@@ -1,5 +1,5 @@
 body {
-    background:#2C3E50;
+    background:#1e272e;
   }
   
   * {
@@ -15,10 +15,17 @@ body {
     height: 500px;
     margin: 30px auto;
   }
-  
+
+  .footer{
+   margin-bottom: 10px;
+   margin-left: 100vh;
+   color: #808e9b;
+  }
+
   .clock-holder {
     width: 100%;
-    background: #fff;
+    border-radius: 25px;
+    background: #808e9b;
     margin: 30px auto;
     position: relative;
   }
@@ -40,7 +47,8 @@ body {
   }
   
   .stopwatch .stopwatch-btn {
-    background: #fff;
+    border-radius: 25px;
+    background: #1e272e;
     margin-top: 30px;
     margin-left: 5px;
     border: none;
